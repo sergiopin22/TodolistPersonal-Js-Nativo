@@ -1,0 +1,152 @@
+:root{
+    --background-main:rgb(255, 255, 255);
+    --background-second:rgb(255, 70, 82);
+    --color-main:rgba(255, 255, 255, 0.741);
+}
+
+/* Scroll bar */
+
+::-webkit-scrollbar{
+    width:15px;
+}
+
+::-webkit-scrollbar-track{
+    background-color:var(--background-main);
+}
+
+::-webkit-scrollbar-thumb{
+    background-color:var(--background-second);
+    border:0.5px solid white;
+    border-radius:1em;
+}
+
+body{
+    background-color: var(--background-main);
+    color:var(--color-main);
+    margin: 0;
+    overflow-x: hidden;
+}
+
+header{
+    background-color: var(--background-second);
+}
+
+
+.title-todo{
+    margin:0 0 0 0;
+}
+
+.nav-input{
+    width:100%;
+    height:20vh;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+}
+
+.input{
+    width:50%;
+    height:2em;
+    border-radius:0.5em;
+    border:none;
+    text-transform:uppercase;
+}
+
+.input:focus{
+    border:none;
+    background-color: #242830;
+    color:wheat;
+}
+
+
+
+.containt-task{
+    width:80%;
+    height:auto;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    background-color:var(--background-second);
+    border-bottom:1px solid black;
+    transition:2seg ease-in-out;
+    word-wrap:break-word; /* esto es para no desborde el contenido fuera del div */
+    text-transform:uppercase;
+}
+
+.error-task{
+    width:80%;
+    height: auto;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    background-color:white;
+    word-wrap:break-word;
+    text-transform:uppercase;
+    color: red;
+}
+
+.edite-task,.delete-task,.complete-edite-task{
+    width:7em;
+    padding:0.4em;
+}
+
+.edite-task{
+    background-color: yellow;
+}
+.complete-edite-task{
+    background-color: rgb(0, 153, 255);
+}
+.delete-task{
+    background-color:green;
+}
+
+/* modo oscuro */
+
+.btn-Dark{
+    position: fixed;
+    z-index: 9999;
+    bottom: 1vh;
+    left:1vw;
+    width:4rem;
+    height:4rem;
+    border-radius: 50%;
+    font-size:2rem;
+    font-weight:bold;
+    background-color:rgb(0, 0, 0);
+    color:var(--second-color);
+    cursor: pointer;
+    outline: 0;
+    border: 0;
+}
+
+.btn-Dark:hover{
+    background-color:black;
+    color:var(--second-color);
+}
+
+.modeDark{
+    background-color:#242830;
+    color:var(--main-color);
+    transition: 0.5s ease-in-out all;
+}
+
+.editarTitle{
+    padding:0.5em;
+    background-color:black;
+    color:white;
+    text-transform:uppercase;
+}
+
+/* @media screen and (max-width:700px){
+    .head-todo{
+        background-color: cyan;
+    }
+} */
+
