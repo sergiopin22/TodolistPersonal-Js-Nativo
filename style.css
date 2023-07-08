@@ -50,7 +50,6 @@ header{
     height:2em;
     border-radius:0.5em;
     border:none;
-    text-transform:uppercase;
 }
 
 .input:focus{
@@ -74,7 +73,6 @@ header{
     border-bottom:1px solid black;
     transition:2seg ease-in-out;
     word-wrap:break-word; /* esto es para no desborde el contenido fuera del div */
-    text-transform:uppercase;
 }
 
 .error-task{
@@ -88,7 +86,6 @@ header{
     margin: auto;
     background-color:white;
     word-wrap:break-word;
-    text-transform:uppercase;
     color: red;
 }
 
@@ -141,7 +138,6 @@ header{
     padding:0.5em;
     background-color:black;
     color:white;
-    text-transform:uppercase;
 }
 
 /* @media screen and (max-width:700px){

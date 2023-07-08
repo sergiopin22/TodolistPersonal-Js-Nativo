@@ -6,6 +6,7 @@ const $input = d.querySelector(".input")
 
 
 
+
 function darkMode(btn,Dark){
     
     const $btnDark = d.querySelector(btn);
@@ -85,7 +86,7 @@ const createTask = ()=>{
         $deleteTask.textContent = `«`
         $deleteTask.classList.add(`delete${$idContaintTask}`)
         $deleteTask.classList.add(`delete-task`)
-        $titleTask.textContent = fullTask[fullTask.length - 1].toUpperCase();
+        $titleTask.textContent = fullTask[fullTask.length - 1];
         $deleteTask.dataset.delete = $idContaintTask;
         $editTask.dataset.edite = $idContaintTask;
         $containTask.dataset.contain = $idContaintTask;
@@ -108,30 +109,6 @@ const createTask = ()=>{
     
     $fragment.appendChild($containTask)
     d.body.appendChild($fragment)
-    // d.body.appendChild($fragment)
-    // const errorMessage = (message = "mensaje de error prueba") =>{
-    //     let $errorTask = d.createElement("div")
-    //     const $errorTitle = d.createElement("h2")
-    
-    //     $errorTask.classList.add(`error-task`)
-    //     $errorTitle.classList.add(`error-title`)
-    //     $errorTitle.textContent = `AVISO ERROR`
-        
-        
-    //     $errorTask.innerHTML = `<h2>${$errorTitle.textContent}</h2> <p>${message}</p>`;
-    //     d.addEventListener(`click`, e =>{
-    //         if(e.target.matches(`.complete${$idContaintTask}`) && $editTask.dataset.edite  === $containTask.dataset.contain){
-    //             setTimeout(() => { 
-    //                 $errorTask.style.setProperty("display","none"); 
-    //                 console.log($editTask.dataset.edite + "editTask")         
-    //                 console.log($containTask.dataset.contain + "containTask")         
-    //             }, 1000);
-    //             // Ingresa minimo un caracter maximo 30, pero no puede estar vacio.
-    //             $fragment.appendChild($errorTask)
-    //             d.body.appendChild($fragment)
-    //         }
-    //     })
-    // }
 
 
     const deleteTask = ()=>{        
@@ -187,24 +164,21 @@ const createTask = ()=>{
     deleteTask()
 }
 
-// vamos a pushear task al fullTask
-d.addEventListener("keydown",(event)=>{
-
-    if(event.target.matches(".input") && event.key === "Enter" && $input.value === ""){
-        alert("NO SE PUEDEN MANDAR TAREAS VACIAS")
+//validacion y correccion de bug con el espacio a la hora de crear tareas
+d.addEventListener("keydown", (event) => {
+    if (event.target.matches(".input") && event.key === "Enter") {
+      const inputValue = $input.value.trim();
+  
+      if (inputValue === "") {
+        alert("NO SE PUEDEN MANDAR TAREAS VACIAS");
+      } else if (inputValue.length <= 30) {
+        let nuevaTask = fullTask.push(inputValue);
+        $input.value = "";
+        createTask();
+      } else {
+        alert("Tareas máximo con 30 caracteres. No se pueden crear tareas más largas.");
+        $input.value = "";
+      }
     }
-    if(event.target.matches(".input") && event.key === "Enter" && $input.value !== ""){
-        if($input.value.length <= 30){
-            let nuevaTask = fullTask.push($input.value)
-            // console.log(fullTask)
-            $input.value = "";
-            createTask()
-        }
-        else{
-            alert("Tareas maximo con 30 caracteres, mayor a lo anterior no se podran crear tareas igual al editar una tarea")
-            $input.value = "";
-        }
-    }
-})
-
+  });
 
