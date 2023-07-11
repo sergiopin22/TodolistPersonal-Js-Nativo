@@ -175,7 +175,7 @@ button{
   }
 
   .Instrucciones{
-    background-color: var(--background-second);
+    color: var(--background-second);
   }
   
   .modal-content button {
