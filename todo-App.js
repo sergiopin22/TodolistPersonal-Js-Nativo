@@ -182,3 +182,18 @@ d.addEventListener("keydown", (event) => {
     }
   });
 
+
+//   modal
+window.addEventListener("DOMContentLoaded", () => {
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const modal = document.getElementById("modal");
+  
+    const closeModal = () => {
+      modal.style.display = "none";
+    };
+  
+    closeModalBtn.addEventListener("click", closeModal);
+  
+    modal.style.display = "flex";
+  });
+  
