@@ -173,6 +173,10 @@ button{
   .modal-content h2 {
     margin-top: 0;
   }
+
+  .Instrucciones{
+    background-color: var(--background-second);
+  }
   
   .modal-content button {
     margin-top: 20px;
