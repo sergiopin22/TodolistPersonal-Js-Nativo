@@ -4,8 +4,11 @@ const ls = window.localStorage;
 const $fragment = d.createDocumentFragment();
 const $input = d.querySelector(".input")
 
-
-
+const resetAudio = (audio) => {
+    audio.pause();
+    audio.currentTime = 0;
+    audio.play()
+  };
 
 function darkMode(btn,Dark){
     
@@ -118,6 +121,7 @@ const createTask = ()=>{
                 // alert(`esta caja es la ${$idContaintTask} a eliminar`);
                     fullTask.splice(fullTask[$idContaintTask],1)
                     $containTask.remove(`contain-task`)
+                    resetAudio(taskCompleteSound); //reiniciar el audio
             }
         })
     }
