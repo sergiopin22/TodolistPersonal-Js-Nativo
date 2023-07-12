@@ -10,48 +10,38 @@ const resetAudio = (audio) => {
     audio.play()
   };
 
-function darkMode(btn,Dark){
-    
-    const $btnDark = d.querySelector(btn);
-    const $activeModeDark = d.querySelector(Dark);
-    const moon = `🌙`
-    const sun = `☀️`
-
-    const modeDark = () =>{
-        $activeModeDark.classList.add("modeDark")
-        $btnDark.textContent = sun;
-        ls.setItem("theme","dark")    
-    }
-    
-    const modeLight = () =>{
-        $btnDark.textContent = moon;
-        ls.setItem("theme","light")    
-        $activeModeDark.classList.remove("modeDark")
-    }
-
-    d.addEventListener("click", e =>{
-        if(e.target.matches(btn)){
-            if($btnDark.textContent === moon){
-                modeDark();
-            }
-            else{
-                modeLight();
-            }
-        }
-        
-    })
-
-    d.addEventListener("DOMContentLoaded", e=>{
-        //console.log(ls.getItem("theme"))//le estamos preguntando si existe theme en localstorage = null
-        //alert("Hola desde la funcion darktheme")
-        if(ls.getItem("theme" === null))ls.setItem("theme","light")//si no existe theme la vamos a crear y le vamos a dar el valor de ligth
-        if(ls.getItem("theme") === "light" )modeLight();
-        if(ls.getItem("theme") === "dark" )modeDark();
-    })
-
-}
-
-darkMode(".btn-Dark", ".main")
+  function darkMode(btnSelector, darkSelector) {
+    const $btnDark = document.querySelector(btnSelector);
+    const $activeModeDark = document.querySelector(darkSelector);
+    const moon = `🌙`;
+    const sun = `☀️`;
+  
+    const setTheme = (theme) => {
+      $btnDark.textContent = theme === "light" ? moon : sun;
+      $activeModeDark.classList.toggle("modeDark", theme === "dark");
+      localStorage.setItem("theme", theme);
+    };
+  
+    const toggleTheme = () => {
+      const currentTheme = localStorage.getItem("theme") || "light";
+      const newTheme = currentTheme === "light" ? "dark" : "light";
+      setTheme(newTheme);
+    };
+  
+    document.addEventListener("click", (e) => {
+      if (e.target.matches(btnSelector)) {
+        toggleTheme();
+      }
+    });
+  
+    document.addEventListener("DOMContentLoaded", () => {
+      const theme = localStorage.getItem("theme") || "light";
+      setTheme(theme);
+    });
+  }
+  
+  darkMode(".btn-Dark", ".main");
+  
 
 // funcion para añadir tareas 
 const fullTask = []
@@ -163,7 +153,6 @@ const createTask = ()=>{
             }
         })
     }
-    
     editeTask()
     deleteTask()
 }
