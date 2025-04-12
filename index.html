@@ -3,38 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo List</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Todo App Personal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="main">
-        <div class="container">
-            <div class="header">
-                <h1>Todo List</h1>
-                <button class="btn-Dark">🌙</button>
+<body class="app">
+    <div class="app__container">
+        <header class="header">
+            <h1 class="header__title">Todo App Personal</h1>
+            <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                <span class="theme-toggle__icon">🌙</span>
+            </button>
+        </header>
+
+        <main class="main">
+            <div class="task-stats">
+                <div class="task-stats__info">
+                    <div class="task-stats__item">
+                        <span class="task-stats__number" id="totalTasks">0</span>
+                        <span class="task-stats__label">Total</span>
+                    </div>
+                    <div class="task-stats__item">
+                        <span class="task-stats__number" id="completedTasks">0</span>
+                        <span class="task-stats__label">Completadas</span>
+                    </div>
+                    <div class="task-stats__item">
+                        <span class="task-stats__number" id="pendingTasks">0</span>
+                        <span class="task-stats__label">Pendientes</span>
+                    </div>
+                </div>
+                <div class="task-stats__progress">
+                    <div class="progress-bar">
+                        <div class="progress-bar__fill" id="progressBar" style="width: 0%"></div>
+                    </div>
+                    <span class="task-stats__percentage" id="progressPercentage">0% Completado</span>
+                </div>
             </div>
-            <div class="input-container">
-                <input type="text" class="input" placeholder="Agrega una tarea...">
-            </div>
+
+            <div class="tasks-container" id="tasksContainer"></div>
+        </main>
+    </div>
+
+    <!-- Modal de nueva tarea -->
+    <div id="newTaskModal" class="modal" role="dialog" aria-labelledby="newTaskModalTitle">
+        <div class="modal__content modal__content--task">
+            <form id="newTaskForm" class="task-form">
+                <div class="task-form__header">
+                    <input type="text" 
+                           class="task-form__title" 
+                           placeholder="Nombre de la tarea"
+                           id="taskTitle"
+                           required>
+                    <button type="button" class="modal__close" id="closeNewTaskModal">×</button>
+                </div>
+
+                <div class="task-form__body">
+                    <div class="task-form__options">
+                        <button type="button" class="task-form__option" data-option="priority" id="priorityButton">
+                            <span class="task-form__option-icon">🏳️</span>
+                            <span class="task-form__option-text">Prioridad</span>
+                        </button>
+                        <div class="priority-dropdown" id="priorityDropdown">
+                            <button type="button" class="priority-option" data-priority="1">
+                                <span class="priority-flag priority-flag--high">🔴</span>
+                                Prioridad 1
+                            </button>
+                            <button type="button" class="priority-option" data-priority="2">
+                                <span class="priority-flag priority-flag--medium">🟡</span>
+                                Prioridad 2
+                            </button>
+                            <button type="button" class="priority-option" data-priority="3">
+                                <span class="priority-flag priority-flag--low">🔵</span>
+                                Prioridad 3
+                            </button>
+                            <button type="button" class="priority-option" data-priority="4">
+                                <span class="priority-flag priority-flag--none">⚪</span>
+                                Prioridad 4
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="task-form__footer">
+                    <button type="submit" class="button button--primary">Añadir tarea</button>
+                    <button type="button" class="button button--secondary" id="cancelNewTask">Cancelar</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <h2>¡Bienvenido a Todo List!</h2>
-            <p>Esta es una aplicación simple para gestionar tus tareas diarias.</p>
-            <p>Características:</p>
-            <ul>
-                <li>Agrega tareas escribiendo y presionando Enter</li>
-                <li>Edita tareas existentes</li>
-                <li>Elimina tareas completadas</li>
-                <li>Modo oscuro/claro</li>
-                <li>Persistencia de datos</li>
-            </ul>
-            <button id="closeModalBtn">Entendido</button>
+    <!-- Botón flotante de añadir -->
+    <button class="fab" id="addTaskButton" aria-label="Añadir nueva tarea">
+        <span class="fab__icon">+</span>
+    </button>
+
+    <!-- Modal de instrucciones -->
+    <div id="modal" class="modal" role="dialog" aria-labelledby="modalTitle">
+        <div class="modal__content">
+            <header class="modal__header">
+                <h2 id="modalTitle" class="modal__title">¡Bienvenido!</h2>
+                <span class="modal__version">Versión 1.2</span>
+            </header>
+            
+            <div class="modal__body">
+                <h3 class="modal__subtitle">Instrucciones de uso:</h3>
+                <ul class="modal__list">
+                    <li class="modal__item">
+                        <span class="modal__icon">✨</span>
+                        Crea una nueva tarea escribiendo y presionando Enter
+                    </li>
+                    <li class="modal__item">
+                        <span class="modal__icon">✏️</span>
+                        Edita tus tareas existentes cuando lo necesites
+                    </li>
+                    <li class="modal__item">
+                        <span class="modal__icon">✅</span>
+                        Marca tus tareas como completadas
+                    </li>
+                    <li class="modal__item">
+                        <span class="modal__icon">🎯</span>
+                        Mantén un seguimiento de tu progreso
+                    </li>
+                </ul>
+            </div>
+
+            <footer class="modal__footer">
+                <button id="closeModalBtn" class="button button--primary">
+                    ¡Empezar!
+                </button>
+            </footer>
         </div>
     </div>
 
+    <audio id="taskCompleteSound" src="8-bit-powerup-6768.mp3" preload="auto"></audio>
+    
     <script type="module" src="js/app.js"></script>
 </body>
 </html>

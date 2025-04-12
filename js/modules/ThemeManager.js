@@ -1,34 +1,33 @@
 import { CONSTANTS } from '../constants/appConstants.js';
 
 export class ThemeManager {
-    constructor(btnSelector, darkSelector) {
-        this.btnSelector = btnSelector;
-        this.darkSelector = darkSelector;
-        this.btnDark = document.querySelector(btnSelector);
-        this.activeModeDark = document.querySelector(darkSelector);
+    constructor() {
+        this.themeToggle = document.getElementById('themeToggle');
+        this.app = document.body;
+        this.isDarkMode = localStorage.getItem('darkMode') === 'true';
+        
         this.init();
-    }
-
-    setTheme(theme) {
-        this.btnDark.textContent = theme === CONSTANTS.THEME.LIGHT ? CONSTANTS.ICONS.MOON : CONSTANTS.ICONS.SUN;
-        this.activeModeDark.classList.toggle("modeDark", theme === CONSTANTS.THEME.DARK);
-        localStorage.setItem("theme", theme);
-    }
-
-    toggleTheme() {
-        const currentTheme = localStorage.getItem("theme") || CONSTANTS.THEME.LIGHT;
-        const newTheme = currentTheme === CONSTANTS.THEME.LIGHT ? CONSTANTS.THEME.DARK : CONSTANTS.THEME.LIGHT;
-        this.setTheme(newTheme);
     }
 
     init() {
         // Aplicar tema inicial
-        const savedTheme = localStorage.getItem("theme") || CONSTANTS.THEME.LIGHT;
-        this.setTheme(savedTheme);
+        this.updateTheme();
 
-        // Agregar evento click al botón
-        this.btnDark.addEventListener("click", () => {
-            this.toggleTheme();
+        // Escuchar cambios en el botón
+        this.themeToggle.addEventListener('click', () => {
+            this.isDarkMode = !this.isDarkMode;
+            this.updateTheme();
+            localStorage.setItem('darkMode', this.isDarkMode);
         });
+    }
+
+    updateTheme() {
+        if (this.isDarkMode) {
+            this.app.classList.add('dark-theme');
+            this.themeToggle.querySelector('.theme-toggle__icon').textContent = '☀️';
+        } else {
+            this.app.classList.remove('dark-theme');
+            this.themeToggle.querySelector('.theme-toggle__icon').textContent = '🌙';
+        }
     }
 } 
