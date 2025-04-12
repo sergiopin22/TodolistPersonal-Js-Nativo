@@ -1,46 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todolist Personal</title>
+    <title>Todo List</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="main">
-    <header class="head-todo">
-        <nav class="nav-input">
-            <h1 class="title-todo">Todo App Personal</h1>
-            <input type="text" name="input-tarea" placeholder="Ingresa tu tarea" class="input">
-        </nav>
-    </header>
-
-    <!-- <div class="containt-task">
-        <h2>HACER OFICIO EN CASA</h2>
-        <div class="options">         
-            <button class="edit">Editar</button>
-            <button class="delete">Eliminar</button>
+<body>
+    <div class="main">
+        <div class="container">
+            <div class="header">
+                <h1>Todo List</h1>
+                <button class="btn-Dark">🌙</button>
+            </div>
+            <div class="input-container">
+                <input type="text" class="input" placeholder="Agrega una tarea...">
+            </div>
         </div>
-    </div> -->
-    <!-- <img src="/fondo_7.jpg" alt=""> -->
+    </div>
 
-    <button class="btn-Dark">🌙</button>
-    
-    <!-- modal -->
     <div id="modal" class="modal">
         <div class="modal-content">
-          <h2>Instrucciones</h2>
-          <strong>Version 1.2 Desktop and Mobile</strong>
-          <p class="Instrucciones">👌 Crea Tu Primera Tarea Y Dale Enter</p>
-            <p class="Instrucciones">✍️ Edita Las Tareas Tambien</p>
-            <p class="Instrucciones">✅ Completas Las Tareas Para Un Dia Productivo</p>
-          <button id="closeModalBtn">Cerrar</button>
+            <h2>¡Bienvenido a Todo List!</h2>
+            <p>Esta es una aplicación simple para gestionar tus tareas diarias.</p>
+            <p>Características:</p>
+            <ul>
+                <li>Agrega tareas escribiendo y presionando Enter</li>
+                <li>Edita tareas existentes</li>
+                <li>Elimina tareas completadas</li>
+                <li>Modo oscuro/claro</li>
+                <li>Persistencia de datos</li>
+            </ul>
+            <button id="closeModalBtn">Entendido</button>
         </div>
-      </div>
+    </div>
 
-      <audio autoplay id="taskCompleteSound" src="/8-bit-powerup-6768.mp3"></audio>
-
-    
-    <script src="/todo-App.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>

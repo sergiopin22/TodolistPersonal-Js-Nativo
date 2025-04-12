@@ -4,158 +4,219 @@ const ls = window.localStorage;
 const $fragment = d.createDocumentFragment();
 const $input = d.querySelector(".input")
 
+// Constantes globales
+const CONSTANTS = {
+    MAX_TASK_LENGTH: 30,
+    THEME: {
+        LIGHT: 'light',
+        DARK: 'dark'
+    },
+    ICONS: {
+        MOON: '🌙',
+        SUN: '☀️',
+        EDIT: '✏️',
+        DELETE: '✔️'
+    }
+};
+
+// Utilidades
 const resetAudio = (audio) => {
     audio.pause();
     audio.currentTime = 0;
-    audio.play()
-  };
+    audio.play();
+};
 
-  function darkMode(btnSelector, darkSelector) {
-    const $btnDark = document.querySelector(btnSelector);
-    const $activeModeDark = document.querySelector(darkSelector);
-    const moon = `🌙`;
-    const sun = `☀️`;
-  
-    const setTheme = (theme) => {
-      $btnDark.textContent = theme === "light" ? moon : sun;
-      $activeModeDark.classList.toggle("modeDark", theme === "dark");
-      localStorage.setItem("theme", theme);
-    };
-  
-    const toggleTheme = () => {
-      const currentTheme = localStorage.getItem("theme") || "light";
-      const newTheme = currentTheme === "light" ? "dark" : "light";
-      setTheme(newTheme);
-    };
-  
-    document.addEventListener("click", (e) => {
-      if (e.target.matches(btnSelector)) {
-        toggleTheme();
-      }
-    });
-  
-    document.addEventListener("DOMContentLoaded", () => {
-      const theme = localStorage.getItem("theme") || "light";
-      setTheme(theme);
-    });
-  }
-  
-  darkMode(".btn-Dark", ".main");
-  
-
-// funcion para añadir tareas 
-const fullTask = []
-
-const createTask = () => {
-    const $containTask = document.createElement("div");
-    const $titleTask = document.createElement("h2");
-    const $optionTask = document.createElement("div");
-    const $editTask = document.createElement("button");
-    const $completeEditTask = document.createElement("button");
-    const $deleteTask = document.createElement("button");
-    const $idContaintTask = fullTask.length - 1;
-  
-    $containTask.appendChild($titleTask);
-    $containTask.appendChild($optionTask);
-    $optionTask.appendChild($editTask);
-    $optionTask.appendChild($completeEditTask);
-    $optionTask.appendChild($deleteTask);
-  
-    $containTask.classList.add("containt-task");
-    $optionTask.classList.add("options");
-    $editTask.classList.add(`edite${$idContaintTask}`, "edite-task");
-    $completeEditTask.classList.add(`complete${$idContaintTask}`, "complete-edite-task");
-    $deleteTask.classList.add(`delete${$idContaintTask}`, "delete-task");
-    $editTask.textContent = "Editar✏️";
-    $completeEditTask.textContent = "Editado";
-    $deleteTask.textContent = "✔️"
-    $titleTask.textContent = fullTask[$idContaintTask];
-    $deleteTask.dataset.delete = $idContaintTask;
-    $editTask.dataset.edite = $idContaintTask;
-    $containTask.dataset.contain = $idContaintTask;
-  
-    $containTask.style.display = "flex";
-    $containTask.style.flexDirection = "column";
-    $containTask.style.textAlign = "center";
-    $completeEditTask.style.display = "none";
-  
-    const deleteTask = () => {
-      document.addEventListener("click", (e) => {
-        if (e.target.matches(`.delete${$idContaintTask}`) && $deleteTask.dataset.delete === $containTask.dataset.contain) {
-          fullTask.splice($idContaintTask, 1);
-          $containTask.remove();
-          resetAudio(taskCompleteSound);
-        }
-      });
-    };
-  
-    const editeTask = () => {
-      document.addEventListener("click", (e) => {
-        if (e.target.matches(`.edite${$idContaintTask}`) && $editTask.dataset.edite === $containTask.dataset.contain) {
-          $titleTask.setAttribute("contenteditable", "true");
-          $titleTask.classList.add("editarTitle");
-          $deleteTask.disabled = true;
-          $editTask.disabled = true;
-          $completeEditTask.style.display = "inline";
-  
-          if ($titleTask.textContent.length === 0 || $titleTask.textContent.length > 30) {
-            $containTask.remove();
-          }
-        }
-      });
-  
-      document.addEventListener("click", (e) => {
-        if (e.target.matches(`.complete-edite-task`)) {
-          $titleTask.setAttribute("contenteditable", "false");
-          $titleTask.classList.remove("editarTitle");
-          $deleteTask.disabled = false;
-          $editTask.disabled = false;
-          $completeEditTask.style.display = "none";
-  
-          if ($titleTask.textContent.length === 0 || $titleTask.textContent.length > 30) {
-            $containTask.remove();
-          }
-        }
-      });
-    };
-  
-    editeTask();
-    deleteTask();
-  
-    $fragment.appendChild($containTask);
-    document.body.appendChild($fragment);
-  };
-  
-  document.addEventListener("keydown", (event) => {
-    if (event.target.matches(".input") && event.key === "Enter") {
-      const inputValue = $input.value.trim();
-  
-      if (inputValue === "") {
-        alert("NO SE PUEDEN MANDAR TAREAS VACIAS");
-      } else if (inputValue.length <= 30) {
-        fullTask.push(inputValue);
-        $input.value = "";
-        createTask();
-      } else {
-        alert("Tareas máximo con 30 caracteres. No se pueden crear tareas más largas.");
-        $input.value = "";
-      }
+// Gestor de tema
+class ThemeManager {
+    constructor(btnSelector, darkSelector) {
+        this.btnSelector = btnSelector;
+        this.darkSelector = darkSelector;
+        this.btnDark = document.querySelector(btnSelector);
+        this.activeModeDark = document.querySelector(darkSelector);
+        this.init();
     }
-  });
-  
 
+    setTheme(theme) {
+        this.btnDark.textContent = theme === CONSTANTS.THEME.LIGHT ? CONSTANTS.ICONS.MOON : CONSTANTS.ICONS.SUN;
+        this.activeModeDark.classList.toggle("modeDark", theme === CONSTANTS.THEME.DARK);
+        localStorage.setItem("theme", theme);
+    }
 
-//   modal
-window.addEventListener("DOMContentLoaded", () => {
-    const closeModalBtn = document.getElementById("closeModalBtn");
-    const modal = document.getElementById("modal");
-  
-    const closeModal = () => {
-      modal.style.display = "none";
-    };
-  
-    closeModalBtn.addEventListener("click", closeModal);
-  
-    modal.style.display = "flex";
-  });
+    toggleTheme() {
+        const currentTheme = localStorage.getItem("theme") || CONSTANTS.THEME.LIGHT;
+        const newTheme = currentTheme === CONSTANTS.THEME.LIGHT ? CONSTANTS.THEME.DARK : CONSTANTS.THEME.LIGHT;
+        this.setTheme(newTheme);
+    }
+
+    init() {
+        // Aplicar tema inicial
+        const savedTheme = localStorage.getItem("theme") || CONSTANTS.THEME.LIGHT;
+        this.setTheme(savedTheme);
+
+        // Agregar evento click al botón
+        this.btnDark.addEventListener("click", () => {
+            this.toggleTheme();
+        });
+    }
+}
+
+// Gestor de tareas
+class TaskManager {
+    constructor() {
+        this.tasks = this.loadTasks();
+        this.fragment = document.createDocumentFragment();
+        this.input = document.querySelector(".input");
+        this.taskCompleteSound = new Audio('8-bit-powerup-6768.mp3');
+        this.init();
+        this.renderSavedTasks();
+    }
+
+    loadTasks() {
+        const savedTasks = localStorage.getItem('tasks');
+        return savedTasks ? JSON.parse(savedTasks) : [];
+    }
+
+    saveTasks() {
+        localStorage.setItem('tasks', JSON.stringify(this.tasks));
+    }
+
+    renderSavedTasks() {
+        this.tasks.forEach((task, index) => {
+            const taskElements = this.createTaskElement(task, index);
+            this.setupTaskEvents(taskElements, index);
+            this.fragment.appendChild(taskElements.taskContainer);
+        });
+        document.body.appendChild(this.fragment);
+    }
+
+    createTaskElement(taskText, taskId) {
+        const taskContainer = document.createElement("div");
+        const titleTask = document.createElement("h2");
+        const optionsContainer = document.createElement("div");
+        const editButton = document.createElement("button");
+        const completeEditButton = document.createElement("button");
+        const deleteButton = document.createElement("button");
+
+        taskContainer.classList.add("containt-task");
+        optionsContainer.classList.add("options");
+        editButton.classList.add(`edite${taskId}`, "edite-task");
+        completeEditButton.classList.add(`complete${taskId}`, "complete-edite-task");
+        deleteButton.classList.add(`delete${taskId}`, "delete-task");
+
+        editButton.textContent = `Editar${CONSTANTS.ICONS.EDIT}`;
+        completeEditButton.textContent = "Editado";
+        deleteButton.textContent = CONSTANTS.ICONS.DELETE;
+        titleTask.textContent = taskText;
+
+        deleteButton.dataset.delete = taskId;
+        editButton.dataset.edite = taskId;
+        taskContainer.dataset.contain = taskId;
+
+        taskContainer.style.display = "flex";
+        taskContainer.style.flexDirection = "column";
+        taskContainer.style.textAlign = "center";
+        completeEditButton.style.display = "none";
+
+        taskContainer.appendChild(titleTask);
+        taskContainer.appendChild(optionsContainer);
+        optionsContainer.appendChild(editButton);
+        optionsContainer.appendChild(completeEditButton);
+        optionsContainer.appendChild(deleteButton);
+
+        return { taskContainer, titleTask, editButton, completeEditButton, deleteButton };
+    }
+
+    setupTaskEvents(taskElements, taskId) {
+        const { taskContainer, titleTask, editButton, completeEditButton, deleteButton } = taskElements;
+
+        deleteButton.addEventListener("click", () => {
+            this.tasks.splice(taskId, 1);
+            this.saveTasks();
+            taskContainer.remove();
+            resetAudio(this.taskCompleteSound);
+        });
+
+        editButton.addEventListener("click", () => {
+            titleTask.setAttribute("contenteditable", "true");
+            titleTask.classList.add("editarTitle");
+            deleteButton.disabled = true;
+            editButton.disabled = true;
+            completeEditButton.style.display = "inline";
+        });
+
+        completeEditButton.addEventListener("click", () => {
+            if (this.validateTaskContent(titleTask)) {
+                titleTask.setAttribute("contenteditable", "false");
+                titleTask.classList.remove("editarTitle");
+                deleteButton.disabled = false;
+                editButton.disabled = false;
+                completeEditButton.style.display = "none";
+                this.tasks[taskId] = titleTask.textContent;
+                this.saveTasks();
+            }
+        });
+    }
+
+    validateTaskContent(titleElement) {
+        const content = titleElement.textContent.trim();
+        if (content.length === 0 || content.length > CONSTANTS.MAX_TASK_LENGTH) {
+            titleElement.closest('.containt-task').remove();
+            return false;
+        }
+        return true;
+    }
+
+    addTask(taskText) {
+        if (taskText.trim() === "") {
+            alert("NO SE PUEDEN MANDAR TAREAS VACIAS");
+            return;
+        }
+        if (taskText.length > CONSTANTS.MAX_TASK_LENGTH) {
+            alert("Tareas máximo con 30 caracteres. No se pueden crear tareas más largas.");
+            return;
+        }
+
+        this.tasks.push(taskText);
+        this.saveTasks();
+        const taskId = this.tasks.length - 1;
+        const taskElements = this.createTaskElement(taskText, taskId);
+        this.setupTaskEvents(taskElements, taskId);
+        this.fragment.appendChild(taskElements.taskContainer);
+        document.body.appendChild(this.fragment);
+    }
+
+    init() {
+        document.addEventListener("keydown", (event) => {
+            if (event.target.matches(".input") && event.key === "Enter") {
+                this.addTask(event.target.value);
+                event.target.value = "";
+            }
+        });
+    }
+}
+
+// Gestor del modal
+class ModalManager {
+    constructor() {
+        this.modal = document.getElementById("modal");
+        this.closeModalBtn = document.getElementById("closeModalBtn");
+        this.init();
+    }
+
+    closeModal() {
+        this.modal.style.display = "none";
+    }
+
+    init() {
+        this.closeModalBtn.addEventListener("click", () => this.closeModal());
+        this.modal.style.display = "flex";
+    }
+}
+
+// Inicialización de la aplicación
+document.addEventListener("DOMContentLoaded", () => {
+    new ThemeManager(".btn-Dark", ".main");
+    new TaskManager();
+    new ModalManager();
+});
   
